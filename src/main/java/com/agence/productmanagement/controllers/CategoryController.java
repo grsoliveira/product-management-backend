@@ -1,7 +1,9 @@
 package com.agence.productmanagement.controllers;
 
+import java.util.List;
 import java.util.UUID;
 
+import com.agence.productmanagement.dto.CategoryDTO;
 import com.agence.productmanagement.entities.Category;
 import com.agence.productmanagement.services.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,6 +27,12 @@ public class CategoryController {
   @Operation(summary = "Get a category by Id")
   public ResponseEntity<Category> findById(@PathVariable String categoryId) {
     return ResponseEntity.ok(categoryService.findById(UUID.fromString(categoryId)));
+  }
+
+  @GetMapping()
+  @Operation(summary = "Get all category ")
+  public ResponseEntity<List<CategoryDTO>> findById() {
+    return ResponseEntity.ok(categoryService.list());
   }
 
 }
