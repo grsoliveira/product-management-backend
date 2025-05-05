@@ -27,14 +27,29 @@ public class ProductService {
   private ProductRepository productRepository;
   private CategoryRepository categoryRepository;
 
-  public Product findById(UUID uuid) {
+  protected Product find(UUID uuid) {
     return productRepository.findById(uuid)
         .orElseThrow(() ->
             new ResponseStatusException(NOT_FOUND, "Product not found for uuid " + uuid));
   }
 
+  public ProductDTO findById(UUID uuid) {
+    Product product = this.find(uuid);
+    return ProductDTO.builder()
+        .id(product.getId())
+        .name(product.getName())
+        .price(product.getPrice())
+        .category(product.getCategory() != null
+            ? CategoryDTO.builder()
+            .id(product.getCategory().getId())
+            .name(product.getCategory().getName())
+            .build()
+            : null)
+        .build();
+  }
+
   public String delete(UUID uuid) {
-    this.productRepository.removeById(uuid);
+    this.productRepository.delete(this.find(uuid));
     return "Product removed successfully";
   }
 
@@ -60,12 +75,12 @@ public class ProductService {
     return productDTOs;
   }
 
-  public Product create(@Valid ProductCreateUpdateRequest request) {
+  public ProductDTO create(ProductCreateUpdateRequest request) {
     Category category = null;
 
-    if (request.getCategoryId() != null) {
-      category = categoryRepository.findById(request.getCategoryId())
-          .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Category not found for id " + request.getCategoryId()));
+    if (request.getCategory() != null) {
+      category = categoryRepository.findById(UUID.fromString(request.getCategory()))
+          .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Category not found for id " + request.getCategory()));
     }
 
     Product product = new Product();
@@ -73,10 +88,21 @@ public class ProductService {
     product.setPrice(request.getPrice());
     product.setCategory(category);
 
-    return productRepository.save(product);
+    Product saved = productRepository.save(product);
+    return ProductDTO.builder()
+        .id(saved.getId())
+        .name(saved.getName())
+        .price(saved.getPrice())
+        .category(saved.getCategory() != null
+            ? CategoryDTO.builder()
+            .id(saved.getCategory().getId())
+            .name(saved.getCategory().getName())
+            .build()
+            : null)
+        .build();
   }
 
-  public Product update(String productId, @Valid ProductCreateUpdateRequest request) {
+  public ProductDTO update(String productId, ProductCreateUpdateRequest request) {
     UUID uuid;
     try {
       uuid = UUID.fromString(productId);
@@ -95,13 +121,24 @@ public class ProductService {
       existingProduct.setPrice(request.getPrice());
     }
 
-    if (request.getCategoryId() != null) {
-      Category category = categoryRepository.findById(request.getCategoryId())
-          .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Category not found for id " + request.getCategoryId()));
+    if (request.getCategory() != null) {
+      Category category = categoryRepository.findById(UUID.fromString(request.getCategory()))
+          .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Category not found for id " + request.getCategory()));
       existingProduct.setCategory(category);
     }
 
-    return productRepository.save(existingProduct);
+    Product saved = productRepository.save(existingProduct);
+    return ProductDTO.builder()
+        .id(saved.getId())
+        .name(saved.getName())
+        .price(saved.getPrice())
+        .category(saved.getCategory() != null
+            ? CategoryDTO.builder()
+            .id(saved.getCategory().getId())
+            .name(saved.getCategory().getName())
+            .build()
+            : null)
+        .build();
   }
 
 }

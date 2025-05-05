@@ -32,7 +32,7 @@ public class ProductController {
 
   @GetMapping("/{productId}")
   @Operation(summary = "Get a product by Id")
-  public ResponseEntity<Product> findById(@PathVariable String productId) {
+  public ResponseEntity<ProductDTO> findById(@PathVariable String productId) {
     return ResponseEntity.ok(productService.findById(UUID.fromString(productId)));
   }
 
@@ -50,16 +50,16 @@ public class ProductController {
 
   @PostMapping
   @Operation(summary = "Create a new product")
-  public ResponseEntity<Product> create(@RequestBody @Valid ProductCreateUpdateRequest request) {
-    Product product = productService.create(request);
-    return new ResponseEntity<>(productService.findById(product.getId()), HttpStatus.CREATED);
+  public ResponseEntity<ProductDTO> create(@RequestBody @Valid ProductCreateUpdateRequest request) {
+    ProductDTO product = productService.create(request);
+    return new ResponseEntity<>(product, HttpStatus.CREATED);
   }
 
   @PutMapping("/{productId}")
   @Operation(summary = "Updates an existing product")
-  public ResponseEntity<Product> update(@PathVariable String productId,
+  public ResponseEntity<ProductDTO> update(@PathVariable String productId,
                                        @RequestBody @Valid ProductCreateUpdateRequest request) {
-    Product product = productService.update(productId, request);
+    ProductDTO product = productService.update(productId, request);
     return new ResponseEntity<>(productService.findById(product.getId()), HttpStatus.OK);
   }
 }

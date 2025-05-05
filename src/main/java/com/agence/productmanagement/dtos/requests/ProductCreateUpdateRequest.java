@@ -18,5 +18,5 @@ public class ProductCreateUpdateRequest {
 
   private BigDecimal price;
 
-  private UUID categoryId;
+  private String category;
 }
