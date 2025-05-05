@@ -17,7 +17,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import com.agence.productmanagement.dtos.ProductDTO;
-import com.agence.productmanagement.dtos.requests.ProductCreateRequest;
+import com.agence.productmanagement.dtos.requests.ProductCreateUpdateRequest;
 import com.agence.productmanagement.entities.Category;
 import com.agence.productmanagement.entities.Product;
 import com.agence.productmanagement.repositories.CategoryRepository;
@@ -138,7 +138,7 @@ public class ProductServiceTest {
   void testCreateProduct_successfully() {
     UUID categoryId = category.getId();
 
-    ProductCreateRequest request = new ProductCreateRequest();
+    ProductCreateUpdateRequest request = new ProductCreateUpdateRequest();
     request.setName("Notebook");
     request.setPrice(new BigDecimal("3500.00"));
     request.setCategoryId(categoryId);
@@ -168,7 +168,7 @@ public class ProductServiceTest {
   void testCreateProduct_categoryNotFound_throwsException() {
     UUID fakeCategoryId = UUID.randomUUID();
 
-    ProductCreateRequest request = new ProductCreateRequest();
+    ProductCreateUpdateRequest request = new ProductCreateUpdateRequest();
     request.setName("Notebook");
     request.setPrice(new BigDecimal("3500.00"));
     request.setCategoryId(fakeCategoryId);
@@ -183,5 +183,72 @@ public class ProductServiceTest {
     verify(categoryRepository, times(1)).findById(fakeCategoryId);
     verify(productRepository, times(0)).save(org.mockito.ArgumentMatchers.any(Product.class));
   }
+
+  @Test
+  void testUpdateProduct_successfully() {
+    UUID categoryId = category.getId();
+
+    ProductCreateUpdateRequest request = new ProductCreateUpdateRequest();
+    request.setName("Smart TV");
+    request.setPrice(new BigDecimal("2999.99"));
+    request.setCategoryId(categoryId);
+
+    when(productRepository.findById(productId)).thenReturn(Optional.of(product));
+    when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(category));
+    when(productRepository.save(org.mockito.ArgumentMatchers.any(Product.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+    Product updated = productService.update(productId.toString(), request);
+
+    assertNotNull(updated);
+    assertEquals("Smart TV", updated.getName());
+    assertEquals(new BigDecimal("2999.99"), updated.getPrice());
+    assertEquals(categoryId, updated.getCategory().getId());
+
+    verify(productRepository, times(1)).findById(productId);
+    verify(categoryRepository, times(1)).findById(categoryId);
+    verify(productRepository, times(1)).save(product);
+  }
+
+  @Test
+  void testUpdateProduct_productNotFound_throwsException() {
+    ProductCreateUpdateRequest request = new ProductCreateUpdateRequest();
+    request.setName("Smart TV");
+    request.setPrice(new BigDecimal("2999.99"));
+    request.setCategoryId(category.getId());
+
+    when(productRepository.findById(productId)).thenReturn(Optional.empty());
+
+    ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+      productService.update(productId.toString(), request);
+    });
+
+    assertTrue(exception.getMessage().contains("Product not found for uuid"));
+    verify(productRepository, times(1)).findById(productId);
+    verify(categoryRepository, times(0)).findById(org.mockito.ArgumentMatchers.any());
+    verify(productRepository, times(0)).save(org.mockito.ArgumentMatchers.any());
+  }
+
+  @Test
+  void testUpdateProduct_categoryNotFound_throwsException() {
+    UUID fakeCategoryId = UUID.randomUUID();
+
+    ProductCreateUpdateRequest request = new ProductCreateUpdateRequest();
+    request.setName("Smart TV");
+    request.setPrice(new BigDecimal("2999.99"));
+    request.setCategoryId(fakeCategoryId);
+
+    when(productRepository.findById(productId)).thenReturn(Optional.of(product));
+    when(categoryRepository.findById(fakeCategoryId)).thenReturn(Optional.empty());
+
+    ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+      productService.update(productId.toString(), request);
+    });
+
+    assertTrue(exception.getMessage().contains("Category not found for id"));
+    verify(productRepository, times(1)).findById(productId);
+    verify(categoryRepository, times(1)).findById(fakeCategoryId);
+    verify(productRepository, times(0)).save(org.mockito.ArgumentMatchers.any());
+  }
+
 
 }

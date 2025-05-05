@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.agence.productmanagement.dtos.ProductDTO;
-import com.agence.productmanagement.dtos.requests.ProductCreateRequest;
+import com.agence.productmanagement.dtos.requests.ProductCreateUpdateRequest;
 import com.agence.productmanagement.entities.Product;
 import com.agence.productmanagement.services.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -49,8 +50,16 @@ public class ProductController {
 
   @PostMapping
   @Operation(summary = "Create a new product")
-  public ResponseEntity<Product> create(@RequestBody @Valid ProductCreateRequest request) {
+  public ResponseEntity<Product> create(@RequestBody @Valid ProductCreateUpdateRequest request) {
     Product product = productService.create(request);
     return new ResponseEntity<>(productService.findById(product.getId()), HttpStatus.CREATED);
+  }
+
+  @PutMapping("/{productId}")
+  @Operation(summary = "Updates an existing product")
+  public ResponseEntity<Product> update(@PathVariable String productId,
+                                       @RequestBody @Valid ProductCreateUpdateRequest request) {
+    Product product = productService.update(productId, request);
+    return new ResponseEntity<>(productService.findById(product.getId()), HttpStatus.OK);
   }
 }
