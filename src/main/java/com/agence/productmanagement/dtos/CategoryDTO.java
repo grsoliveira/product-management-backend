@@ -1,9 +1,9 @@
-package com.agence.productmanagement.dto;
+package com.agence.productmanagement.dtos;
 
-import java.math.BigDecimal;
+import java.io.Serializable;
 import java.util.UUID;
 
-import com.agence.productmanagement.entities.Category;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +16,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class ProductDTO {
+public class CategoryDTO implements Serializable {
 
   @JsonProperty("id")
   private UUID id;
@@ -24,9 +24,6 @@ public class ProductDTO {
   @JsonProperty("name")
   private String name;
 
-  @JsonProperty("price")
-  private BigDecimal price;
-
-  @JsonProperty("category")
-  private CategoryDTO category;
+  @JsonIgnore
+  private CategoryDTO parent;
 }

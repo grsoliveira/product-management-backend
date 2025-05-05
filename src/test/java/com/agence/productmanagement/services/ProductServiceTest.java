@@ -16,9 +16,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.agence.productmanagement.dto.ProductDTO;
+import com.agence.productmanagement.dtos.ProductDTO;
+import com.agence.productmanagement.dtos.requests.ProductCreateRequest;
 import com.agence.productmanagement.entities.Category;
 import com.agence.productmanagement.entities.Product;
+import com.agence.productmanagement.repositories.CategoryRepository;
 import com.agence.productmanagement.repositories.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,6 +32,8 @@ import org.springframework.web.server.ResponseStatusException;
 public class ProductServiceTest {
   @Mock
   private ProductRepository productRepository;
+  @Mock
+  private CategoryRepository categoryRepository;
 
   @InjectMocks
   private ProductService productService;
@@ -129,4 +133,55 @@ public class ProductServiceTest {
     assertEquals("Product removed successfully", result);
     verify(productRepository, times(1)).removeById(productId);
   }
+
+  @Test
+  void testCreateProduct_successfully() {
+    UUID categoryId = category.getId();
+
+    ProductCreateRequest request = new ProductCreateRequest();
+    request.setName("Notebook");
+    request.setPrice(new BigDecimal("3500.00"));
+    request.setCategoryId(categoryId);
+
+    when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(category));
+
+    Product savedProduct = new Product();
+    savedProduct.setId(UUID.randomUUID());
+    savedProduct.setName(request.getName());
+    savedProduct.setPrice(request.getPrice());
+    savedProduct.setCategory(category);
+
+    when(productRepository.save(org.mockito.ArgumentMatchers.any(Product.class))).thenReturn(savedProduct);
+
+    Product result = productService.create(request);
+
+    assertNotNull(result);
+    assertEquals("Notebook", result.getName());
+    assertEquals(new BigDecimal("3500.00"), result.getPrice());
+    assertEquals(category.getId(), result.getCategory().getId());
+
+    verify(categoryRepository, times(1)).findById(categoryId);
+    verify(productRepository, times(1)).save(org.mockito.ArgumentMatchers.any(Product.class));
+  }
+
+  @Test
+  void testCreateProduct_categoryNotFound_throwsException() {
+    UUID fakeCategoryId = UUID.randomUUID();
+
+    ProductCreateRequest request = new ProductCreateRequest();
+    request.setName("Notebook");
+    request.setPrice(new BigDecimal("3500.00"));
+    request.setCategoryId(fakeCategoryId);
+
+    when(categoryRepository.findById(fakeCategoryId)).thenReturn(Optional.empty());
+
+    ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+      productService.create(request);
+    });
+
+    assertTrue(exception.getMessage().contains("Category not found for id"));
+    verify(categoryRepository, times(1)).findById(fakeCategoryId);
+    verify(productRepository, times(0)).save(org.mockito.ArgumentMatchers.any(Product.class));
+  }
+
 }

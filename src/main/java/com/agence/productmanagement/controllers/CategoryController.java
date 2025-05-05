@@ -3,7 +3,7 @@ package com.agence.productmanagement.controllers;
 import java.util.List;
 import java.util.UUID;
 
-import com.agence.productmanagement.dto.CategoryDTO;
+import com.agence.productmanagement.dtos.CategoryDTO;
 import com.agence.productmanagement.entities.Category;
 import com.agence.productmanagement.services.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;

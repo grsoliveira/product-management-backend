@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.agence.productmanagement.dto.CategoryDTO;
+import com.agence.productmanagement.dtos.CategoryDTO;
 import com.agence.productmanagement.entities.Category;
 import com.agence.productmanagement.repositories.CategoryRepository;
 

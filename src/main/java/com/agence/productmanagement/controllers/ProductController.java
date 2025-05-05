@@ -3,16 +3,21 @@ package com.agence.productmanagement.controllers;
 import java.util.List;
 import java.util.UUID;
 
-import com.agence.productmanagement.dto.ProductDTO;
+import com.agence.productmanagement.dtos.ProductDTO;
+import com.agence.productmanagement.dtos.requests.ProductCreateRequest;
 import com.agence.productmanagement.entities.Product;
 import com.agence.productmanagement.services.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,5 +45,12 @@ public class ProductController {
   @Operation(summary = "Delete a product by Id")
   public ResponseEntity<String> delete(@PathVariable String productId) {
     return ResponseEntity.ok(productService.delete(UUID.fromString(productId)));
+  }
+
+  @PostMapping
+  @Operation(summary = "Create a new product")
+  public ResponseEntity<Product> create(@RequestBody @Valid ProductCreateRequest request) {
+    Product product = productService.create(request);
+    return new ResponseEntity<>(productService.findById(product.getId()), HttpStatus.CREATED);
   }
 }

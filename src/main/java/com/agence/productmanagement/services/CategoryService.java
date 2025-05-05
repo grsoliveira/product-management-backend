@@ -7,7 +7,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import com.agence.productmanagement.dto.CategoryDTO;
+import com.agence.productmanagement.dtos.CategoryDTO;
 import com.agence.productmanagement.entities.Category;
 import com.agence.productmanagement.repositories.CategoryRepository;
 import lombok.AllArgsConstructor;
