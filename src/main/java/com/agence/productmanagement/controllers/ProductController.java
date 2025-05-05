@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,4 +36,9 @@ public class ProductController {
     return ResponseEntity.ok(productService.list());
   }
 
+  @DeleteMapping("/{productId}")
+  @Operation(summary = "Delete a product by Id")
+  public ResponseEntity<String> delete(@PathVariable String productId) {
+    return ResponseEntity.ok(productService.delete(UUID.fromString(productId)));
+  }
 }
