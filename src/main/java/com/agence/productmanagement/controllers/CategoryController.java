@@ -25,7 +25,7 @@ public class CategoryController {
 
   @GetMapping("/{categoryId}")
   @Operation(summary = "Get a category by Id")
-  public ResponseEntity<Category> findById(@PathVariable String categoryId) {
+  public ResponseEntity<CategoryDTO> findById(@PathVariable String categoryId) {
     return ResponseEntity.ok(categoryService.findById(UUID.fromString(categoryId)));
   }
 

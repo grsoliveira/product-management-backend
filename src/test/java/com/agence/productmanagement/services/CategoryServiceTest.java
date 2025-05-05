@@ -49,7 +49,7 @@ public class CategoryServiceTest {
   void testFindById_returnsCategory() {
     when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(category));
 
-    Category result = categoryService.findById(categoryId);
+    CategoryDTO result = categoryService.findById(categoryId);
 
     assertNotNull(result);
     assertEquals("Eletrônicos", result.getName());
