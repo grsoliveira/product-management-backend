@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -115,5 +116,17 @@ public class ProductServiceTest {
     assertNull(dto.getCategory());
 
     verify(productRepository, times(1)).findAll();
+  }
+
+  @Test
+  void testDelete_callsRepositoryAndReturnsSuccessMessage() {
+    UUID productId = UUID.fromString("20000000-0000-0000-0000-000000000001");
+
+    doNothing().when(productRepository).removeById(productId);
+
+    String result = productService.delete(productId);
+
+    assertEquals("Product removed successfully", result);
+    verify(productRepository, times(1)).removeById(productId);
   }
 }

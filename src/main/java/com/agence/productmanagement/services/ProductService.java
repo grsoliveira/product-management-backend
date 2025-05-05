@@ -28,6 +28,11 @@ public class ProductService {
             new ResponseStatusException(NOT_FOUND, "Product not found for uuid " + uuid));
   }
 
+  public String delete(UUID uuid) {
+    this.productRepository.removeById(uuid);
+    return "Product removed successfully";
+  }
+
   public List<ProductDTO> list() {
     List<Product> products = StreamSupport
         .stream(productRepository.findAll().spliterator(), false)
