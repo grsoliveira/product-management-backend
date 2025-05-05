@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import com.agence.productmanagement.dtos.ProductDTO;
 import com.agence.productmanagement.dtos.requests.ProductCreateUpdateRequest;
+import com.agence.productmanagement.dtos.requests.ProductFilterRequest;
 import com.agence.productmanagement.entities.Product;
 import com.agence.productmanagement.services.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -58,8 +59,15 @@ public class ProductController {
   @PutMapping("/{productId}")
   @Operation(summary = "Updates an existing product")
   public ResponseEntity<Product> update(@PathVariable String productId,
-                                       @RequestBody @Valid ProductCreateUpdateRequest request) {
+                                        @RequestBody @Valid ProductCreateUpdateRequest request) {
     Product product = productService.update(productId, request);
     return new ResponseEntity<>(productService.findById(product.getId()), HttpStatus.OK);
+  }
+
+  @GetMapping
+  @Operation(summary = "Return a list of filtered products")
+  public ResponseEntity<List<ProductDTO>> search(@Valid ProductFilterRequest request) {
+    List<ProductDTO> result = productService.search(request);
+    return ResponseEntity.ok(result);
   }
 }

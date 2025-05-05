@@ -18,6 +18,7 @@ import java.util.UUID;
 
 import com.agence.productmanagement.dtos.ProductDTO;
 import com.agence.productmanagement.dtos.requests.ProductCreateUpdateRequest;
+import com.agence.productmanagement.dtos.requests.ProductFilterRequest;
 import com.agence.productmanagement.entities.Category;
 import com.agence.productmanagement.entities.Product;
 import com.agence.productmanagement.repositories.CategoryRepository;
