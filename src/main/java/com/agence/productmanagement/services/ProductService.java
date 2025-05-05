@@ -7,10 +7,14 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import com.agence.productmanagement.dto.CategoryDTO;
-import com.agence.productmanagement.dto.ProductDTO;
+import com.agence.productmanagement.dtos.CategoryDTO;
+import com.agence.productmanagement.dtos.ProductDTO;
+import com.agence.productmanagement.dtos.requests.ProductCreateRequest;
+import com.agence.productmanagement.entities.Category;
 import com.agence.productmanagement.entities.Product;
+import com.agence.productmanagement.repositories.CategoryRepository;
 import com.agence.productmanagement.repositories.ProductRepository;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,6 +25,7 @@ import org.springframework.web.server.ResponseStatusException;
 @AllArgsConstructor
 public class ProductService {
   private ProductRepository productRepository;
+  private CategoryRepository categoryRepository;
 
   public Product findById(UUID uuid) {
     return productRepository.findById(uuid)
@@ -55,4 +60,19 @@ public class ProductService {
     return productDTOs;
   }
 
+  public Product create(@Valid ProductCreateRequest request) {
+    Category category = null;
+
+    if (request.getCategoryId() != null) {
+      category = categoryRepository.findById(request.getCategoryId())
+          .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Category not found for id " + request.getCategoryId()));
+    }
+
+    Product product = new Product();
+    product.setName(request.getName());
+    product.setPrice(request.getPrice());
+    product.setCategory(category);
+
+    return productRepository.save(product);
+  }
 }
