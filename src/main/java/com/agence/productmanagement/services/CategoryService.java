@@ -21,10 +21,23 @@ import org.springframework.web.server.ResponseStatusException;
 public class CategoryService {
   private CategoryRepository categoryRepository;
 
-  public Category findById(UUID uuid) {
+  private Category find(UUID uuid) {
     return categoryRepository.findById(uuid)
         .orElseThrow(() ->
             new ResponseStatusException(NOT_FOUND, "Category not found for uuid " + uuid));
+  }
+
+  public CategoryDTO findById(UUID uuid) {
+    Category category = this.find(uuid);
+    return CategoryDTO.builder()
+        .id(category.getId())
+        .name(category.getName())
+        .parent(category.getParent() != null ?
+            CategoryDTO.builder()
+                .id(category.getParent().getId())
+                .name(category.getParent().getName())
+                .build() : null)
+        .build();
   }
 
   public List<CategoryDTO> list() {
