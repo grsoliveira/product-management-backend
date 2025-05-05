@@ -9,7 +9,7 @@ import java.util.stream.StreamSupport;
 
 import com.agence.productmanagement.dtos.CategoryDTO;
 import com.agence.productmanagement.dtos.ProductDTO;
-import com.agence.productmanagement.dtos.requests.ProductCreateRequest;
+import com.agence.productmanagement.dtos.requests.ProductCreateUpdateRequest;
 import com.agence.productmanagement.entities.Category;
 import com.agence.productmanagement.entities.Product;
 import com.agence.productmanagement.repositories.CategoryRepository;
@@ -60,7 +60,7 @@ public class ProductService {
     return productDTOs;
   }
 
-  public Product create(@Valid ProductCreateRequest request) {
+  public Product create(@Valid ProductCreateUpdateRequest request) {
     Category category = null;
 
     if (request.getCategoryId() != null) {
@@ -75,4 +75,33 @@ public class ProductService {
 
     return productRepository.save(product);
   }
+
+  public Product update(String productId, @Valid ProductCreateUpdateRequest request) {
+    UUID uuid;
+    try {
+      uuid = UUID.fromString(productId);
+    } catch (IllegalArgumentException ex) {
+      throw new ResponseStatusException(NOT_FOUND, "Invalid UUID format: " + productId);
+    }
+
+    Product existingProduct = productRepository.findById(uuid)
+        .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Product not found for uuid " + productId));
+
+    if (request.getName() != null) {
+      existingProduct.setName(request.getName());
+    }
+
+    if (request.getPrice() != null) {
+      existingProduct.setPrice(request.getPrice());
+    }
+
+    if (request.getCategoryId() != null) {
+      Category category = categoryRepository.findById(request.getCategoryId())
+          .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Category not found for id " + request.getCategoryId()));
+      existingProduct.setCategory(category);
+    }
+
+    return productRepository.save(existingProduct);
+  }
+
 }
