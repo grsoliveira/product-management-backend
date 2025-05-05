@@ -33,11 +33,11 @@ public class ProductController {
 
   @GetMapping("/{productId}")
   @Operation(summary = "Get a product by Id")
-  public ResponseEntity<ProductDTO> findById(@PathVariable String productId) {
+  public ResponseEntity<ProductDTO> find(@PathVariable String productId) {
     return ResponseEntity.ok(productService.findById(UUID.fromString(productId)));
   }
 
-  @GetMapping()
+  @GetMapping
   @Operation(summary = "Get all products ")
   public ResponseEntity<List<ProductDTO>> findById() {
     return ResponseEntity.ok(productService.list());
@@ -64,7 +64,7 @@ public class ProductController {
     return new ResponseEntity<>(productService.findById(product.getId()), HttpStatus.OK);
   }
 
-  @GetMapping
+  @GetMapping("/search")
   @Operation(summary = "Return a list of filtered products")
   public ResponseEntity<List<ProductDTO>> search(@Valid ProductFilterRequest request) {
     List<ProductDTO> result = productService.search(request);
