@@ -10,10 +10,12 @@ import java.util.stream.StreamSupport;
 import com.agence.productmanagement.dtos.CategoryDTO;
 import com.agence.productmanagement.dtos.ProductDTO;
 import com.agence.productmanagement.dtos.requests.ProductCreateUpdateRequest;
+import com.agence.productmanagement.dtos.requests.ProductFilterRequest;
 import com.agence.productmanagement.entities.Category;
 import com.agence.productmanagement.entities.Product;
 import com.agence.productmanagement.repositories.CategoryRepository;
 import com.agence.productmanagement.repositories.ProductRepository;
+import com.agence.productmanagement.repositories.specs.ProductSpecifications;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -139,6 +141,11 @@ public class ProductService {
             .build()
             : null)
         .build();
+  }
+
+  public List<ProductDTO> search(ProductFilterRequest filter) {
+    List<Product> products = productRepository.findAll(ProductSpecifications.withFilters(filter));
+    return products.stream().map(ProductDTO::fromEntity).toList();
   }
 
 }
