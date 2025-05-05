@@ -1,7 +1,7 @@
 -- product_management.category definition
 
 CREATE TABLE `category` (
-                            `tax_id` binary(16) NOT NULL,
+                            `id` binary(16) NOT NULL,
                             `name` varchar(255) NOT NULL,
                             `parent_id` binary(16) DEFAULT NULL,
                             PRIMARY KEY (`tax_id`),

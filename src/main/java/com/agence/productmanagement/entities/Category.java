@@ -1,4 +1,4 @@
-package com.agence.productmanagement.entity;
+package com.agence.productmanagement.entities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,10 +22,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "categories")
 public class Category {
 
   @Id
-  @Column(name = "tax_id", nullable = false)
+  @Column(name = "id", nullable = false)
   private UUID id;
 
   @Column(name = "name", nullable = false)
