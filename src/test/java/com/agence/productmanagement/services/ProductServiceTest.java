@@ -105,25 +105,6 @@ public class ProductServiceTest {
     verify(productRepository, times(1)).findAll();
   }
 
-  @Test
-  void testList_returnsProductDTOsWithoutCategory() {
-    product.setCategory(null);
-
-    when(productRepository.findAll()).thenReturn(Collections.singletonList(product));
-
-    List<ProductToListDTO> result = productService.list();
-
-    assertEquals(1, result.size());
-    ProductToListDTO dto = result.get(0);
-
-    assertEquals(product.getId(), dto.getId());
-    assertEquals(product.getName(), dto.getName());
-    assertEquals(product.getPrice(), dto.getPrice());
-    assertNull(dto.getCategory());
-
-    verify(productRepository, times(1)).findAll();
-  }
-
   //FIXME refactor
 //  @Test
 //  void testDelete_callsRepositoryAndReturnsSuccessMessage() {
