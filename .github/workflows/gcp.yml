@@ -6,34 +6,45 @@ on:
 
 jobs:
   deploy:
-    name: Setup Gcloud Account
+    name: Build and Deploy to GCP Cloud Run
     runs-on: ubuntu-latest
+
     env:
       IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/product-manager-backend:latest
-      
+
     steps:
-      # Git checkout
-      - name: Checkout
-        uses: actions/checkout@v2
-      
-      # Login to GCP
-      - uses: google-github-actions/setup-gcloud@v0.2.0
-        with: 
+      # Checkout do repositório
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # Configuração da conta do GCP
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/setup-gcloud@v1
+        with:
           service_account_key: ${{ secrets.GCP_CREDENTIALS }}
           project_id: ${{ secrets.GCP_PROJECT_ID }}
-        
-      # Gcloud configure docker
-      - name: Configure Docker
-        run: gcloud auth configure-docker --quiet
-      
-      # Build image
+
+      # Autenticar Docker com GCR
+      - name: Configure Docker for GCR
+        run: gcloud auth configure-docker gcr.io --quiet
+
+      # Build da imagem Docker
       - name: Build Docker Image
         run: docker build -t $IMAGE_NAME .
-      
-      # Push image to registry
-      - name: Push Docker Image
+
+      # Push da imagem para o GCR
+      - name: Push Docker Image to GCR
         run: docker push $IMAGE_NAME
-      
-      # Deploy image
-      - name: Deploy Docker Image
-        run: gcloud run deploy product-manager-backend --image $IMAGE_NAME --region southamerica-east1 --memory 512Mi --min-instances 1 --max-instances 5 --platform managed --port 8080 --allow-unauthenticated
+
+      # Deploy no Cloud Run
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy product-manager-backend \
+            --image $IMAGE_NAME \
+            --region southamerica-east1 \
+            --memory 512Mi \
+            --min-instances 1 \
+            --max-instances 5 \
+            --platform managed \
+            --port 8080 \
+            --allow-unauthenticated
