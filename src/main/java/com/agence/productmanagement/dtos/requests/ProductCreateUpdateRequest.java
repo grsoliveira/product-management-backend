@@ -15,6 +15,10 @@ public class ProductCreateUpdateRequest {
 
   private String name;
 
+  private String description;
+
+  private Integer amount;
+
   private BigDecimal price;
 
   private ProductCreateUpdateCategoryRequest category;

@@ -40,6 +40,8 @@ public class ProductService {
     return ProductDTO.builder()
         .id(product.getId())
         .name(product.getName())
+        .description(product.getDescription())
+        .amount(product.getAmount())
         .price(product.getPrice())
         .category(product.getCategory() != null
             ? CategoryDTO.builder()
@@ -84,6 +86,8 @@ public class ProductService {
 
     Product product = new Product();
     product.setName(request.getName());
+    product.setDescription(request.getDescription());
+    product.setAmount(request.getAmount());
     product.setPrice(request.getPrice());
     product.setCategory(category);
 
@@ -114,6 +118,14 @@ public class ProductService {
 
     if (request.getName() != null) {
       existingProduct.setName(request.getName());
+    }
+
+    if (request.getDescription() != null) {
+      existingProduct.setDescription(request.getDescription());
+    }
+
+    if (request.getAmount() != null) {
+      existingProduct.setAmount(request.getAmount());
     }
 
     if (request.getPrice() != null) {
