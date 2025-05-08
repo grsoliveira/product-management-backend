@@ -38,4 +38,12 @@ public class Category {
 
   @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
   private List<Category> children = new ArrayList<>();
+
+  public String getFullPath() {
+    if (parent == null) {
+      return name;
+    }
+    return parent.getFullPath() + " > " + name;
+  }
+
 }

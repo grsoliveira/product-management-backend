@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.agence.productmanagement.dtos.ProductDTO;
+import com.agence.productmanagement.dtos.ProductToListDTO;
 import com.agence.productmanagement.dtos.requests.ProductCreateUpdateRequest;
 import com.agence.productmanagement.dtos.requests.ProductFilterRequest;
 import com.agence.productmanagement.services.ProductService;
@@ -36,7 +37,7 @@ public class ProductController {
 
   @GetMapping
   @Operation(summary = "Get all products ")
-  public ResponseEntity<List<ProductDTO>> findById() {
+  public ResponseEntity<List<ProductToListDTO>> findById() {
     return ResponseEntity.ok(productService.list());
   }
 

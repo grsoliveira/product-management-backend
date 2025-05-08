@@ -9,6 +9,7 @@ import java.util.stream.StreamSupport;
 
 import com.agence.productmanagement.dtos.CategoryDTO;
 import com.agence.productmanagement.dtos.ProductDTO;
+import com.agence.productmanagement.dtos.ProductToListDTO;
 import com.agence.productmanagement.dtos.requests.ProductCreateUpdateRequest;
 import com.agence.productmanagement.dtos.requests.ProductFilterRequest;
 import com.agence.productmanagement.entities.Category;
@@ -54,22 +55,19 @@ public class ProductService {
     return "Product removed successfully";
   }
 
-  public List<ProductDTO> list() {
+  public List<ProductToListDTO> list() {
     List<Product> products = StreamSupport
         .stream(productRepository.findAll().spliterator(), false)
         .collect(Collectors.toList());
 
-    List<ProductDTO> productDTOs = products.stream()
-        .map(product -> ProductDTO.builder()
+    List<ProductToListDTO> productDTOs = products.stream()
+        .map(product -> ProductToListDTO.builder()
             .id(product.getId())
             .name(product.getName())
+            .description(product.getDescription())
+            .available(product.getAmount() != null && product.getAmount().intValue() > 0 ? Boolean.TRUE : Boolean.FALSE)
             .price(product.getPrice())
-            .category(product.getCategory() != null
-                ? CategoryDTO.builder()
-                .id(product.getCategory().getId())
-                .name(product.getCategory().getName())
-                .build()
-                : null)
+            .category(product.getCategory().getFullPath())
             .build())
         .collect(Collectors.toList());
 

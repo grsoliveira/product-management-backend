@@ -17,7 +17,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class ProductDTO {
+public class ProductToListDTO {
 
   @JsonProperty("id")
   private UUID id;
@@ -28,28 +28,26 @@ public class ProductDTO {
   @JsonProperty("description")
   private String description;
 
-  @JsonProperty("amount")
-  private Integer amount;
+  @JsonProperty("available")
+  private Boolean available;
 
   @JsonProperty("price")
   private BigDecimal price;
 
   @JsonProperty("category")
-  private CategoryDTO category;
+  private String category;
 
   @JsonIgnore
-  public static ProductDTO fromEntity(Product product) {
-    return ProductDTO.builder()
+  public static ProductToListDTO fromEntity(Product product) {
+    return ProductToListDTO.builder()
         .id(product.getId())
         .name(product.getName())
         .description(product.getDescription())
-        .amount(product.getAmount())
+        .available(product.getAmount() != null && product.getAmount().intValue() > 0 ? Boolean.TRUE : Boolean.FALSE )
         .price(product.getPrice())
+        //TODO fix category full path
         .category(product.getCategory() != null
-            ? CategoryDTO.builder()
-            .id(product.getCategory().getId())
-            .name(product.getCategory().getName())
-            .build()
+            ? ""
             : null)
         .build();
   }
