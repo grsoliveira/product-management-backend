@@ -8,6 +8,4 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface ProductRepository extends JpaRepository<Product, UUID>, JpaSpecificationExecutor<Product> {
 
-  void removeById(UUID id);
-
 }

@@ -6,14 +6,12 @@ import java.util.UUID;
 import com.agence.productmanagement.dtos.ProductDTO;
 import com.agence.productmanagement.dtos.requests.ProductCreateUpdateRequest;
 import com.agence.productmanagement.dtos.requests.ProductFilterRequest;
-import com.agence.productmanagement.entities.Product;
 import com.agence.productmanagement.services.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -58,7 +56,7 @@ public class ProductController {
   @PutMapping("/{productId}")
   @Operation(summary = "Updates an existing product")
   public ResponseEntity<ProductDTO> update(@PathVariable String productId,
-                                       @RequestBody @Valid ProductCreateUpdateRequest request) {
+                                           @RequestBody @Valid ProductCreateUpdateRequest request) {
     ProductDTO product = productService.update(productId, request);
     return new ResponseEntity<>(productService.findById(product.getId()), HttpStatus.OK);
   }

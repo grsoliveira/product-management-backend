@@ -4,12 +4,10 @@ import java.util.List;
 import java.util.UUID;
 
 import com.agence.productmanagement.dtos.CategoryDTO;
-import com.agence.productmanagement.entities.Category;
 import com.agence.productmanagement.services.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -16,7 +16,6 @@ import com.agence.productmanagement.entities.Product;
 import com.agence.productmanagement.repositories.CategoryRepository;
 import com.agence.productmanagement.repositories.ProductRepository;
 import com.agence.productmanagement.repositories.specs.ProductSpecifications;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

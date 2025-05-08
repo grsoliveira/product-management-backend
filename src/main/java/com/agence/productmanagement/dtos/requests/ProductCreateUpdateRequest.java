@@ -1,7 +1,6 @@
 package com.agence.productmanagement.dtos.requests;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
