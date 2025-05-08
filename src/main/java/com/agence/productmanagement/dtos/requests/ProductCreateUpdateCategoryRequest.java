@@ -1,7 +1,6 @@
 package com.agence.productmanagement.dtos.requests;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,11 +11,9 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductCreateUpdateRequest {
+public class ProductCreateUpdateCategoryRequest {
+
+  private String id;
 
   private String name;
-
-  private BigDecimal price;
-
-  private ProductCreateUpdateCategoryRequest category;
 }

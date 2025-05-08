@@ -81,7 +81,7 @@ public class ProductService {
     Category category = null;
 
     if (request.getCategory() != null) {
-      category = categoryRepository.findById(UUID.fromString(request.getCategory()))
+      category = categoryRepository.findById(UUID.fromString(request.getCategory().getId()))
           .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Category not found for id " + request.getCategory()));
     }
 
@@ -124,7 +124,7 @@ public class ProductService {
     }
 
     if (request.getCategory() != null) {
-      Category category = categoryRepository.findById(UUID.fromString(request.getCategory()))
+      Category category = categoryRepository.findById(UUID.fromString(request.getCategory().getId()))
           .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Category not found for id " + request.getCategory()));
       existingProduct.setCategory(category);
     }
