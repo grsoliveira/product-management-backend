@@ -18,6 +18,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import com.agence.productmanagement.dtos.ProductDTO;
+import com.agence.productmanagement.dtos.requests.ProductCreateUpdateCategoryRequest;
 import com.agence.productmanagement.dtos.requests.ProductCreateUpdateRequest;
 import com.agence.productmanagement.dtos.requests.ProductFilterRequest;
 import com.agence.productmanagement.entities.Category;
@@ -144,7 +145,10 @@ public class ProductServiceTest {
     ProductCreateUpdateRequest request = new ProductCreateUpdateRequest();
     request.setName("Notebook");
     request.setPrice(new BigDecimal("3500.00"));
-    request.setCategory(categoryId.toString());
+    request.setCategory(
+        ProductCreateUpdateCategoryRequest.builder()
+            .id(categoryId.toString())
+            .build());
 
     when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(category));
 
@@ -174,7 +178,11 @@ public class ProductServiceTest {
     ProductCreateUpdateRequest request = new ProductCreateUpdateRequest();
     request.setName("Notebook");
     request.setPrice(new BigDecimal("3500.00"));
-    request.setCategory(fakeCategoryId.toString());
+    request.setCategory(
+        ProductCreateUpdateCategoryRequest.builder()
+            .id(fakeCategoryId.toString())
+            .build()
+    );
 
     when(categoryRepository.findById(fakeCategoryId)).thenReturn(Optional.empty());
 
@@ -194,7 +202,11 @@ public class ProductServiceTest {
     ProductCreateUpdateRequest request = new ProductCreateUpdateRequest();
     request.setName("Smart TV");
     request.setPrice(new BigDecimal("2999.99"));
-    request.setCategory(categoryId.toString());
+    request.setCategory(
+        ProductCreateUpdateCategoryRequest.builder()
+            .id(categoryId.toString())
+            .build()
+    );
 
     when(productRepository.findById(productId)).thenReturn(Optional.of(product));
     when(categoryRepository.findById(categoryId)).thenReturn(Optional.of(category));
@@ -217,7 +229,11 @@ public class ProductServiceTest {
     ProductCreateUpdateRequest request = new ProductCreateUpdateRequest();
     request.setName("Smart TV");
     request.setPrice(new BigDecimal("2999.99"));
-    request.setCategory(category.getId().toString());
+    request.setCategory(
+        ProductCreateUpdateCategoryRequest.builder()
+            .id(category.getId().toString())
+            .build()
+    );
 
     when(productRepository.findById(productId)).thenReturn(Optional.empty());
 
@@ -238,7 +254,10 @@ public class ProductServiceTest {
     ProductCreateUpdateRequest request = new ProductCreateUpdateRequest();
     request.setName("Smart TV");
     request.setPrice(new BigDecimal("2999.99"));
-    request.setCategory(fakeCategoryId.toString());
+    request.setCategory(
+        ProductCreateUpdateCategoryRequest.builder()
+            .id(fakeCategoryId.toString())
+            .build());
 
     when(productRepository.findById(productId)).thenReturn(Optional.of(product));
     when(categoryRepository.findById(fakeCategoryId)).thenReturn(Optional.empty());
