@@ -6,41 +6,32 @@ on:
 
 jobs:
   deploy:
-    name: Build and Deploy to GCP Cloud Run
+    name: Build and Deploy to GCP
     runs-on: ubuntu-latest
 
-    env:
-      IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/product-manager-backend:latest
-
     steps:
-      # Checkout do repositório
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      # Configuração da conta do GCP
       - name: Authenticate with Google Cloud
         uses: google-github-actions/setup-gcloud@v1
         with:
           service_account_key: ${{ secrets.GCP_CREDENTIALS }}
           project_id: ${{ secrets.GCP_PROJECT_ID }}
 
-      # Autenticar Docker com GCR
-      - name: Configure Docker for GCR
-        run: gcloud auth configure-docker gcr.io --quiet
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker southamerica-east1-docker.pkg.dev --quiet
 
-      # Build da imagem Docker
       - name: Build Docker Image
-        run: docker build -t $IMAGE_NAME .
+        run: docker build -t southamerica-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/docker-repo/product-manager-backend:latest .
 
-      # Push da imagem para o GCR
-      - name: Push Docker Image to GCR
-        run: docker push $IMAGE_NAME
+      - name: Push Docker Image to Artifact Registry
+        run: docker push southamerica-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/docker-repo/product-manager-backend:latest
 
-      # Deploy no Cloud Run
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy product-manager-backend \
-            --image $IMAGE_NAME \
+            --image southamerica-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/docker-repo/product-manager-backend:latest \
             --region southamerica-east1 \
             --memory 512Mi \
             --min-instances 1 \
