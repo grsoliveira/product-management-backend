@@ -17,21 +17,26 @@ jobs:
         uses: google-github-actions/setup-gcloud@v1
         with:
           service_account_key: ${{ secrets.GCP_CREDENTIALS }}
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          project_id: anserjufe-319714
+
+      - name: Setup Docker Authentication
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
       - name: Configure Docker for Artifact Registry
         run: gcloud auth configure-docker southamerica-east1-docker.pkg.dev --quiet
 
       - name: Build Docker Image
-        run: docker build -t southamerica-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/docker-repo/product-manager-backend:latest .
+        run: docker build -t southamerica-east1-docker.pkg.dev/anserjufe-319714/docker-repo/product-manager-backend:latest .
     
       - name: Push Docker Image to Artifact Registry
-        run: docker push southamerica-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/docker-repo/product-manager-backend:latest
+        run: docker push southamerica-east1-docker.pkg.dev/anserjufe-319714/docker-repo/product-manager-backend:latest
 
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy product-manager-backend \
-            --image southamerica-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/docker-repo/product-manager-backend:latest \
+            --image southamerica-east1-docker.pkg.dev/anserjufe-319714/docker-repo/product-manager-backend:latest \
             --region southamerica-east1 \
             --memory 512Mi \
             --min-instances 1 \
