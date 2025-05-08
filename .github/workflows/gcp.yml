@@ -1,4 +1,4 @@
-name: Deploy Spike to GCP
+name: Deploy product-manager-backend to GCP
 
 on:
   push:
@@ -9,7 +9,7 @@ jobs:
     name: Setup Gcloud Account
     runs-on: ubuntu-latest
     env:
-      IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/spike-gcloud:latest
+      IMAGE_NAME: gcr.io/${{ secrets.GCP_PROJECT_ID }}/product-manager-backend:latest
       
     steps:
       # Git checkout
@@ -36,4 +36,4 @@ jobs:
       
       # Deploy image
       - name: Deploy Docker Image
-        run: gcloud run deploy spike-gcloud --image $IMAGE_NAME --region southamerica-east1 --memory 512Mi --min-instances 1 --max-instances 5 --platform managed --port 8080 --allow-unauthenticated
+        run: gcloud run deploy product-manager-backend --image $IMAGE_NAME --region southamerica-east1 --memory 512Mi --min-instances 1 --max-instances 5 --platform managed --port 8080 --allow-unauthenticated
