@@ -44,10 +44,6 @@ The API uses Basic Authentication:
 4. Run the project:
 
 
-
-
-
-
 ## API Documentation
 
 Complete API documentation is available through Swagger UI:
@@ -58,17 +54,8 @@ Complete API documentation is available through Swagger UI:
 The project uses MySQL as the database. The structure includes:
 - Products table
 - Categories table with hierarchical relationships
-
-## Unit Tests
-
-The project includes unit tests that can be run using:
-
-
-
-
-
-
-
+- 
+![image](https://github.com/user-attachments/assets/58992140-411b-44d8-9035-bc7ebf192c53)
 
 
 ## CI/CD
