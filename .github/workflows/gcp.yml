@@ -13,12 +13,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Authenticate Docker to Artifact Registry
-        run: |
-          echo "${{ secrets.GCP_CREDENTIALS }}" > /tmp/key.json
-          gcloud auth activate-service-account --key-file=/tmp/key.json
-          gcloud auth configure-docker southamerica-east1-docker.pkg.dev --quiet
-
       - name: Authenticate with Google Cloud
         uses: google-github-actions/setup-gcloud@v1
         with:
@@ -30,13 +24,6 @@ jobs:
 
       - name: Build Docker Image
         run: docker build -t southamerica-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/docker-repo/product-manager-backend:latest .
-
-      - name: Docker login with gcloud
-        run: |
-          echo "${{ secrets.GCP_CREDENTIALS }}" > /tmp/key.json
-          gcloud auth activate-service-account --key-file=/tmp/key.json
-          gcloud auth configure-docker southamerica-east1-docker.pkg.dev --quiet
-          gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://southamerica-east1-docker.pkg.dev
     
       - name: Push Docker Image to Artifact Registry
         run: docker push southamerica-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/docker-repo/product-manager-backend:latest
