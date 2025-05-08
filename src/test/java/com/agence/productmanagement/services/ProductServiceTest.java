@@ -18,6 +18,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import com.agence.productmanagement.dtos.ProductDTO;
+import com.agence.productmanagement.dtos.ProductToListDTO;
 import com.agence.productmanagement.dtos.requests.ProductCreateUpdateCategoryRequest;
 import com.agence.productmanagement.dtos.requests.ProductCreateUpdateRequest;
 import com.agence.productmanagement.dtos.requests.ProductFilterRequest;
@@ -91,17 +92,15 @@ public class ProductServiceTest {
   void testList_returnsProductDTOsWithCategory() {
     when(productRepository.findAll()).thenReturn(Collections.singletonList(product));
 
-    List<ProductDTO> result = productService.list();
+    List<ProductToListDTO> result = productService.list();
 
     assertEquals(1, result.size());
-    ProductDTO dto = result.get(0);
+    ProductToListDTO dto = result.get(0);
 
     assertEquals(product.getId(), dto.getId());
     assertEquals(product.getName(), dto.getName());
     assertEquals(product.getPrice(), dto.getPrice());
     assertNotNull(dto.getCategory());
-    assertEquals(category.getId(), dto.getCategory().getId());
-    assertEquals(category.getName(), dto.getCategory().getName());
 
     verify(productRepository, times(1)).findAll();
   }
@@ -112,10 +111,10 @@ public class ProductServiceTest {
 
     when(productRepository.findAll()).thenReturn(Collections.singletonList(product));
 
-    List<ProductDTO> result = productService.list();
+    List<ProductToListDTO> result = productService.list();
 
     assertEquals(1, result.size());
-    ProductDTO dto = result.get(0);
+    ProductToListDTO dto = result.get(0);
 
     assertEquals(product.getId(), dto.getId());
     assertEquals(product.getName(), dto.getName());
